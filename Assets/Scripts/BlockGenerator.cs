@@ -5,12 +5,12 @@ using UnityEngine;
 public class BlockGenerator : MonoBehaviour
 {
     //Singleton
-    public static BlockGenerator BlockGen { get; set; }
+    public static BlockGenerator Instance { get; set; }
     void Awake()
     {
-        if (BlockGen == null)
+        if (Instance == null)
         {
-            BlockGen = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -26,42 +26,41 @@ public class BlockGenerator : MonoBehaviour
     public GameObject yellowCube;
     public GameObject purpleCube;
 
-    //The falling block
-    GameObject block;
+    //Block prefab
+    public GameObject block;
+
+    //Temporary new block reference
+    GameObject newBlock;
 
     //Cube positions in a block
     Vector3[] cubePos = { new Vector3(0, 0, 0), new Vector3(0, 0.5f, 0), new Vector3(0, 1, 0) };
 
-    //Spawn position
-    public GameObject spawn;
-    Vector3 spawnPos;
-
     //Temporary new cube reference
     GameObject newCube;
 
-    //Testing counter
-    int count = 1;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        spawnPos = spawn.transform.position;
-    }
-
-    //Create a cube in a block
-    void CreateCube(GameObject cube, Vector3 position)
-    {
-        newCube = Instantiate(cube, block.transform) as GameObject;
-        newCube.transform.localPosition = position;
-    }
-    
     //Create a block of cubes
-    public GameObject CreateBlock()
+    public GameObject CreateBlock(int playerNum, Vector3 spawnPos, bool isFalling)
     {
-        block = new GameObject("Block");
-        block.tag = "MainBlock";
-        block.transform.position = spawnPos;
-        block.AddComponent<Block>(); //Add the Block.cs script
+        newBlock = Instantiate(block, spawnPos, Quaternion.identity) as GameObject;
+
+        if (isFalling && playerNum == 0)
+        {
+            newBlock.tag = "MainBlock0";
+        }
+        else if (isFalling && playerNum == 1)
+        {
+            newBlock.tag = "MainBlock1";
+        }
+        else if (!isFalling && playerNum == 0)
+        {
+            newBlock.tag = "NextBlock0";
+        }
+        else if (!isFalling && playerNum == 1)
+        {
+            newBlock.tag = "NextBlock1";
+        }
+
+        //newBlock.AddComponent<Block>(); //Add the Block.cs script
 
         //block.AddComponent<BoxCollider2D>();
         //block.GetComponent<BoxCollider2D>().offset = new Vector2(0, 0.5f);
@@ -72,40 +71,51 @@ public class BlockGenerator : MonoBehaviour
 
         if (typeRoll < 70)
         {
-            block.GetComponent<Block>().type = 3;
+            newBlock.GetComponent<Block>().type = 3;
         }
         else
         {
-            block.GetComponent<Block>().type = 2;
+            newBlock.GetComponent<Block>().type = 2;
         }
 
         //A cube type has 20% chance to appear on a cube
-        for (int i = 0; i < block.GetComponent<Block>().type; i++)
+        for (int i = 0; i < newBlock.GetComponent<Block>().type; i++)
         {
             int cubeRoll = Random.Range(0, 100);
 
             if (cubeRoll < 20)
             {
-                CreateCube(redCube, cubePos[i]);
+                CreateCube(redCube, cubePos[i], playerNum);
             }
             else if (cubeRoll < 40)
             {
-                CreateCube(blueCube, cubePos[i]);
+                CreateCube(blueCube, cubePos[i], playerNum);
             }
             else if (cubeRoll < 60)
             {
-                CreateCube(greenCube, cubePos[i]);
+                CreateCube(greenCube, cubePos[i], playerNum);
             }
             else if (cubeRoll < 80)
             {
-                CreateCube(yellowCube, cubePos[i]);
+                CreateCube(yellowCube, cubePos[i], playerNum);
             }
             else if (cubeRoll < 100)
             {
-                CreateCube(purpleCube, cubePos[i]);
+                CreateCube(purpleCube, cubePos[i], playerNum);
             }
         }
 
-        return block;
+        newBlock.transform.Find("SideCollisionCheck").SetAsLastSibling();
+        //newBlock.GetComponent<Block>().InitalizeBlock();
+
+        return newBlock;
+    }
+
+    //Create a cube in a block
+    void CreateCube(GameObject cube, Vector3 position, int playerNum)
+    {
+        newCube = Instantiate(cube, newBlock.transform) as GameObject;
+        newCube.transform.localPosition = position;
+        newCube.name += playerNum.ToString();
     }
 }

@@ -5,67 +5,125 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     //Reference to keep track of the falling block
-    GameObject block;
+    GameObject block1;
+    GameObject block2;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    //Bounds
+    public Transform leftWall1;
+    public Transform rightWall1;
+    public Transform leftWall2;
+    public Transform rightWall2;
 
     // Update is called once per frame
     void Update()
     {
-        block = GameObject.FindWithTag("MainBlock");
-
-        if (block != null)
+        block1 = BoardManager.Instance.fallingBlocks[0];
+        block2 = BoardManager.Instance.fallingBlocks[1];
+        
+        //Player 1 Control: JKL - Z
+        if (block1 != null)
         {
-            #region "PC Controls"
             //Change place of the cubes in the falling block
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 Vector3 temp = new Vector3();
-                temp = block.GetComponent<Block>().Cubes[1].localPosition;
+                temp = block1.GetComponent<Block>().cubes[1].localPosition;
 
-                if (block.GetComponent<Block>().type == 2)
+                if (block1.GetComponent<Block>().type == 2)
                 {
-                    block.GetComponent<Block>().Cubes[1].localPosition = block.GetComponent<Block>().Cubes[2].localPosition;
-                    block.GetComponent<Block>().Cubes[2].localPosition = temp;
+                    block1.GetComponent<Block>().cubes[1].localPosition = block1.GetComponent<Block>().cubes[2].localPosition;
+                    block1.GetComponent<Block>().cubes[2].localPosition = temp;
                 }
-                else if (block.GetComponent<Block>().type == 3)
+                else if (block1.GetComponent<Block>().type == 3)
                 {
-                    block.GetComponent<Block>().Cubes[1].localPosition = block.GetComponent<Block>().Cubes[2].localPosition;
-                    block.GetComponent<Block>().Cubes[2].localPosition = block.GetComponent<Block>().Cubes[3].localPosition;
-                    block.GetComponent<Block>().Cubes[3].localPosition = temp;
+                    block1.GetComponent<Block>().cubes[1].localPosition = block1.GetComponent<Block>().cubes[2].localPosition;
+                    block1.GetComponent<Block>().cubes[2].localPosition = block1.GetComponent<Block>().cubes[3].localPosition;
+                    block1.GetComponent<Block>().cubes[3].localPosition = temp;
                 }
             }
 
             //Move the falling block to the left
-            if (Input.GetKeyDown(KeyCode.LeftArrow) && !block.GetComponent<Block>().leftCol)
+            if (Input.GetKeyDown(KeyCode.J) && !block1.GetComponent<Block>().leftCol)
             {
-                if (block.transform.position.x > -1.75)
-                    block.transform.position -= new Vector3(0.5f, 0, 0);
+                if (block1.transform.position.x > leftWall1.position.x)
+                {
+                    block1.transform.position -= new Vector3(0.5f, 0, 0);
+                }
             }
             //Move the falling block to the right
-            if (Input.GetKeyDown(KeyCode.RightArrow) && !block.GetComponent<Block>().rightCol)
+            if (Input.GetKeyDown(KeyCode.L) && !block1.GetComponent<Block>().rightCol)
             {
-                if (block.transform.position.x < 3)
-                    block.transform.position += new Vector3(0.5f, 0, 0);
+                if (block1.transform.position.x < rightWall1.position.x)
+                {
+                    block1.transform.position += new Vector3(0.5f, 0, 0);
+                }
             }
 
             //Make the block fall faster
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.K))
             {
-                block.GetComponent<Block>().timer = 0;
-                block.GetComponent<Block>().timeStep = 0.05f;
+                block1.GetComponent<Block>().timer = 0;
+                block1.GetComponent<Block>().timeStep = 0.05f;
             }
             //The block falls at normal speed
-            else if (Input.GetKeyUp(KeyCode.DownArrow))
+            else if (Input.GetKeyUp(KeyCode.K))
             {
-                block.GetComponent<Block>().timer = 0.5f;
-                block.GetComponent<Block>().timeStep = 0.5f;
+                block1.GetComponent<Block>().timer = 0.5f;
+                block1.GetComponent<Block>().timeStep = 0.5f;
             }
-            #endregion "End of PC Controls"
+        }
+
+        //Player 2 Control: Num4 Num5 Num6 - End
+        if (block2 != null)
+        {
+            //Change place of the cubes in the falling block
+            if (Input.GetKeyDown(KeyCode.End))
+            {
+                Vector3 temp = new Vector3();
+                temp = block2.GetComponent<Block>().cubes[1].localPosition;
+
+                if (block2.GetComponent<Block>().type == 2)
+                {
+                    block2.GetComponent<Block>().cubes[1].localPosition = block2.GetComponent<Block>().cubes[2].localPosition;
+                    block2.GetComponent<Block>().cubes[2].localPosition = temp;
+                }
+                else if (block2.GetComponent<Block>().type == 3)
+                {
+                    block2.GetComponent<Block>().cubes[1].localPosition = block2.GetComponent<Block>().cubes[2].localPosition;
+                    block2.GetComponent<Block>().cubes[2].localPosition = block2.GetComponent<Block>().cubes[3].localPosition;
+                    block2.GetComponent<Block>().cubes[3].localPosition = temp;
+                }
+            }
+
+            //Move the falling block to the left
+            if (Input.GetKeyDown(KeyCode.Keypad4) && !block2.GetComponent<Block>().leftCol)
+            {
+                if (block2.transform.position.x > leftWall2.position.x)
+                {
+                    block2.transform.position -= new Vector3(0.5f, 0, 0);
+                }
+            }
+            //Move the falling block to the right
+            if (Input.GetKeyDown(KeyCode.Keypad6) && !block2.GetComponent<Block>().rightCol)
+            {
+                if (block2.transform.position.x < rightWall2.position.x)
+                {
+                    block2.transform.position += new Vector3(0.5f, 0, 0);
+                }
+            }
+
+            //Make the block fall faster
+            if (Input.GetKeyDown(KeyCode.Keypad5))
+            {
+                block2.GetComponent<Block>().timer = 0;
+                block2.GetComponent<Block>().timeStep = 0.05f;
+            }
+            //The block falls at normal speed
+            else if (Input.GetKeyUp(KeyCode.Keypad5))
+            {
+                block2.GetComponent<Block>().timer = 0.5f;
+                block2.GetComponent<Block>().timeStep = 0.5f;
+            }
         }
     }
 }

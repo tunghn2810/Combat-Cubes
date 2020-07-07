@@ -9,21 +9,21 @@ public static class CubeFunction
     static Vector3 vertOffset = new Vector3(0, 0.251f, 0);
 
     //Check for collisions with other cubes
-    public static void CollisionCheck(GameObject cube)
+    public static void CollisionCheck(GameObject cube, int playerNum)
     {
         Cube cubeObj = cube.GetComponent<Cube>();
 
         //4 Cases: Horizontal, Vertical, Diagonal - Backslash, Diagonal - Forward slash
         //Horizontal - Left
         RaycastHit2D leftInfo = Physics2D.Raycast(cube.transform.position - horzOffset, Vector2.left, 0.05f);
-        if (leftInfo && leftInfo.transform.gameObject.tag == cube.tag)
+        if (leftInfo && leftInfo.transform.gameObject.CompareTag(cube.tag))
         {
             cubeObj.left = leftInfo.transform.gameObject;
         }
 
         //Horizontal - Right
         RaycastHit2D rightInfo = Physics2D.Raycast(cube.transform.position + horzOffset, Vector2.right, 0.05f);
-        if (rightInfo && rightInfo.transform.gameObject.tag == cube.tag)
+        if (rightInfo && rightInfo.transform.gameObject.CompareTag(cube.tag))
         {
             cubeObj.right = rightInfo.transform.gameObject;
         }
@@ -35,13 +35,13 @@ public static class CubeFunction
 
         //Vertical - Up
         RaycastHit2D upInfo = Physics2D.Raycast(cube.transform.position + vertOffset, Vector2.up, 0.05f);
-        if (upInfo && upInfo.transform.gameObject.tag == cube.tag)
+        if (upInfo && upInfo.transform.gameObject.CompareTag(cube.tag))
         {
             cubeObj.up = upInfo.transform.gameObject;
         }
         //Vertical - Down
         RaycastHit2D downInfo = Physics2D.Raycast(cube.transform.position - vertOffset, Vector2.down, 0.05f);
-        if (downInfo && downInfo.transform.gameObject.tag == cube.tag)
+        if (downInfo && downInfo.transform.gameObject.CompareTag(cube.tag))
         {
             cubeObj.down = downInfo.transform.gameObject;
         }
@@ -53,13 +53,13 @@ public static class CubeFunction
 
         //Diagonal - Backslash - Up Left
         RaycastHit2D upLeftInfo = Physics2D.Raycast(cube.transform.position + vertOffset - horzOffset, Vector2.up + Vector2.left, 0.05f);
-        if (upLeftInfo && upLeftInfo.transform.gameObject.tag == cube.tag)
+        if (upLeftInfo && upLeftInfo.transform.gameObject.CompareTag(cube.tag))
         {
             cubeObj.upLeft = upLeftInfo.transform.gameObject;
         }
         //Diagonal - Backslash - Down Right
         RaycastHit2D downRightInfo = Physics2D.Raycast(cube.transform.position - vertOffset + horzOffset, Vector2.down + Vector2.right, 0.05f);
-        if (downRightInfo && downRightInfo.transform.gameObject.tag == cube.tag)
+        if (downRightInfo && downRightInfo.transform.gameObject.CompareTag(cube.tag))
         {
             cubeObj.downRight = downRightInfo.transform.gameObject;
         }
@@ -71,13 +71,13 @@ public static class CubeFunction
 
         //Diagonal - Forward slash - Up Right
         RaycastHit2D upRightInfo = Physics2D.Raycast(cube.transform.position + vertOffset + horzOffset, Vector2.up + Vector2.right, 0.05f);
-        if (upRightInfo && upRightInfo.transform.gameObject.tag == cube.tag)
+        if (upRightInfo && upRightInfo.transform.gameObject.CompareTag(cube.tag))
         {
             cubeObj.upRight = upRightInfo.transform.gameObject;
         }
         //Diagonal - Forward slash - Down Left
         RaycastHit2D downLeftInfo = Physics2D.Raycast(cube.transform.position - vertOffset - horzOffset, Vector2.down + Vector2.left, 0.05f);
-        if (downLeftInfo && downLeftInfo.transform.gameObject.tag == cube.tag)
+        if (downLeftInfo && downLeftInfo.transform.gameObject.CompareTag(cube.tag))
         {
             cubeObj.downLeft = downLeftInfo.transform.gameObject;
         }
@@ -92,11 +92,11 @@ public static class CubeFunction
         if (cubeObj.bingoHorz || cubeObj.bingoVert || cubeObj.bingoBslash || cubeObj.bingoFslash)
         {
             cubeObj.gotMatched = true;
-            BoardManager.BoardMng.matched = true;
+            BoardManager.Instance.matcheds[playerNum] = true;
 
-            if (!BoardManager.BoardMng.toBeDestroyed.Contains(cube))
+            if (!BoardManager.Instance.toBeDestroyeds[playerNum].Contains(cube))
             {
-                BoardManager.BoardMng.toBeDestroyed.Add(cube);
+                BoardManager.Instance.toBeDestroyeds[playerNum].Add(cube);
             }
             //Matched(cube);
         }
@@ -142,108 +142,104 @@ public static class CubeFunction
     }
 
     //Add matched cubes to be destroyed to a list
-    public static void Matched(GameObject cube)
+    public static void Matched(GameObject cube, int playerNum)
     {
         Cube cubeObj = cube.GetComponent<Cube>();
 
         //Matched horizontally
         if (cubeObj.bingoHorz)
         {
-            if (cubeObj.left && cubeObj.left.tag == cube.tag)
+            if (cubeObj.left && cubeObj.left.CompareTag(cube.tag))
             {
-                if (!BoardManager.BoardMng.toBeDestroyed.Contains(cubeObj.left))
+                if (!BoardManager.Instance.toBeDestroyeds[playerNum].Contains(cubeObj.left))
                 {
-                    BoardManager.BoardMng.toBeDestroyed.Add(cubeObj.left);
+                    BoardManager.Instance.toBeDestroyeds[playerNum].Add(cubeObj.left);
                 }
                 cubeObj.left.GetComponent<Cube>().bingoHorz = true;
-                //Matched(cubeObj.left);
             }
-            if (cubeObj.right && cubeObj.right.tag == cube.tag)
+            if (cubeObj.right && cubeObj.right.CompareTag(cube.tag))
             {
-                if (!BoardManager.BoardMng.toBeDestroyed.Contains(cubeObj.right))
+                if (!BoardManager.Instance.toBeDestroyeds[playerNum].Contains(cubeObj.right))
                 {
-                    BoardManager.BoardMng.toBeDestroyed.Add(cubeObj.right);
+                    BoardManager.Instance.toBeDestroyeds[playerNum].Add(cubeObj.right);
                 }
                 cubeObj.right.GetComponent<Cube>().bingoHorz = true;
-                //Matched(cubeObj.right);
             }
         }
 
         //Matched vertically
         if (cubeObj.bingoVert)
         {
-            if (cubeObj.up && cubeObj.up.tag == cube.tag)
+            if (cubeObj.up && cubeObj.up.CompareTag(cube.tag))
             {
-                if (!BoardManager.BoardMng.toBeDestroyed.Contains(cubeObj.up))
+                if (!BoardManager.Instance.toBeDestroyeds[playerNum].Contains(cubeObj.up))
                 {
-                    BoardManager.BoardMng.toBeDestroyed.Add(cubeObj.up);
+                    BoardManager.Instance.toBeDestroyeds[playerNum].Add(cubeObj.up);
                 }
                 cubeObj.up.GetComponent<Cube>().bingoVert = true;
-                //Matched(cubeObj.up);
             }
-            if (cubeObj.down && cubeObj.down.tag == cube.tag)
+            if (cubeObj.down && cubeObj.down.CompareTag(cube.tag))
             {
-                if (!BoardManager.BoardMng.toBeDestroyed.Contains(cubeObj.down))
+                if (!BoardManager.Instance.toBeDestroyeds[playerNum].Contains(cubeObj.down))
                 {
-                    BoardManager.BoardMng.toBeDestroyed.Add(cubeObj.down);
+                    BoardManager.Instance.toBeDestroyeds[playerNum].Add(cubeObj.down);
                 }
                 cubeObj.down.GetComponent<Cube>().bingoVert = true;
-                //Matched(cubeObj.down);
             }
         }
 
         //Matched diagonally - Backlash
         if (cubeObj.bingoBslash)
         {
-            if (cubeObj.upLeft && cubeObj.upLeft.tag == cube.tag)
+            if (cubeObj.upLeft && cubeObj.upLeft.CompareTag(cube.tag))
             {
-                if (!BoardManager.BoardMng.toBeDestroyed.Contains(cubeObj.upLeft))
+                if (!BoardManager.Instance.toBeDestroyeds[playerNum].Contains(cubeObj.upLeft))
                 {
-                    BoardManager.BoardMng.toBeDestroyed.Add(cubeObj.upLeft);
+                    BoardManager.Instance.toBeDestroyeds[playerNum].Add(cubeObj.upLeft);
                 }
                 cubeObj.upLeft.GetComponent<Cube>().bingoBslash = true;
-                //Matched(cubeObj.upLeft);
             }
-            if (cubeObj.downRight && cubeObj.downRight.tag == cube.tag)
+            if (cubeObj.downRight && cubeObj.downRight.CompareTag(cube.tag))
             {
-                if (!BoardManager.BoardMng.toBeDestroyed.Contains(cubeObj.downRight))
+                if (!BoardManager.Instance.toBeDestroyeds[playerNum].Contains(cubeObj.downRight))
                 {
-                    BoardManager.BoardMng.toBeDestroyed.Add(cubeObj.downRight);
+                    BoardManager.Instance.toBeDestroyeds[playerNum].Add(cubeObj.downRight);
                 }
                 cubeObj.downRight.GetComponent<Cube>().bingoBslash = true;
-                //Matched(cubeObj.downRight);
             }
         }
 
         //Matched diagonally - Forward slash
         if (cubeObj.bingoFslash)
         {
-            if (cubeObj.upRight && cubeObj.upRight.tag == cube.tag)
+            if (cubeObj.upRight && cubeObj.upRight.CompareTag(cube.tag))
             {
-                if (!BoardManager.BoardMng.toBeDestroyed.Contains(cubeObj.upRight))
+                if (!BoardManager.Instance.toBeDestroyeds[playerNum].Contains(cubeObj.upRight))
                 {
-                    BoardManager.BoardMng.toBeDestroyed.Add(cubeObj.upRight);
+                    BoardManager.Instance.toBeDestroyeds[playerNum].Add(cubeObj.upRight);
                 }
                 cubeObj.upRight.GetComponent<Cube>().bingoFslash = true;
-                //Matched(cubeObj.upRight);
             }
-            if (cubeObj.downLeft && cubeObj.downLeft.tag == cube.tag)
+            if (cubeObj.downLeft && cubeObj.downLeft.CompareTag(cube.tag))
             {
-                if (!BoardManager.BoardMng.toBeDestroyed.Contains(cubeObj.downLeft))
+                if (!BoardManager.Instance.toBeDestroyeds[playerNum].Contains(cubeObj.downLeft))
                 {
-                    BoardManager.BoardMng.toBeDestroyed.Add(cubeObj.downLeft);
+                    BoardManager.Instance.toBeDestroyeds[playerNum].Add(cubeObj.downLeft);
                 }
                 cubeObj.downLeft.GetComponent<Cube>().bingoFslash = true;
-                //Matched(cubeObj.downLeft);
             }
         }
 
         cubeObj.didMatchCheck = true;
-        //BlockCombine(cube);
+    }
+
+    public static void BlinkAnimation(GameObject cube)
+    {
+        cube.GetComponent<Animator>().SetBool("isMatched", true);
     }
 
     //Combine the cubes above the destroyed cube to move them down
-    public static void BlockCombine(GameObject cube)
+    public static void BlockCombine(GameObject cube, int playerNum)
     {
         Cube cubeObj = cube.GetComponent<Cube>();
 
@@ -251,6 +247,9 @@ public static class CubeFunction
         RaycastHit2D firstBlock = Physics2D.Raycast(cube.transform.position + vertOffset, Vector2.up, 6.0f, LayerMask.GetMask("Cubes"));
 
         //Make the cube 'disappear'
+        cube.GetComponent<Animator>().SetBool("isMatched", false);
+        cube.GetComponent<SpriteRenderer>().enabled = false;
+        cube.GetComponent<SpriteRenderer>().enabled = false;
         cube.GetComponent<SpriteRenderer>().enabled = false;
         cube.GetComponent<Collider2D>().enabled = false;
 
@@ -261,7 +260,7 @@ public static class CubeFunction
 
             if (cubeObj.bingoVert)
             {
-                if (firstBlock.transform.tag != cube.tag)
+                if (!firstBlock.transform.CompareTag(cube.tag))
                 {
                     proceed = true;
                 }
@@ -275,8 +274,16 @@ public static class CubeFunction
             {
                 RaycastHit2D[] movingBlocks = Physics2D.RaycastAll(cube.transform.position + vertOffset, Vector2.up, 6.0f, LayerMask.GetMask("Cubes"));
 
-                GameObject tempBlock = new GameObject("TempBlock ");
-                tempBlock.tag = "TempBlock";
+                GameObject tempBlock = new GameObject("TempBlock");
+                if (playerNum == 0)
+                {
+                    tempBlock.tag = "TempBlock0";
+                }
+                else
+                {
+                    tempBlock.tag = "TempBlock1";
+                }
+
                 tempBlock.transform.position = firstBlock.transform.position;
 
                 foreach (RaycastHit2D item in movingBlocks)
@@ -293,6 +300,7 @@ public static class CubeFunction
                 tempBlock.AddComponent<Block>();
                 tempBlock.GetComponent<Block>().timeStep = 0.05f;
                 tempBlock.GetComponent<Block>().timer = 0.05f;
+                tempBlock.GetComponent<Block>().InitalizeBlock();
             }
         }
 

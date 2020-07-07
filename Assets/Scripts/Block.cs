@@ -24,17 +24,21 @@ public class Block : MonoBehaviour
     [System.NonSerialized] public int type;
 
     //Cubes in the falling block
-    [SerializeField]
-    Transform[] cubes;
+    public Transform[] cubes;
 
-    public Transform[] Cubes { get => cubes; set => cubes = value; }
-
-    // Start is called before the first frame update
-    void Start()
+    //Object for side collision checks
+    GameObject sideCol;
+    
+    public void InitalizeBlock()
     {
         timer = timeStep;
         delayTimer = delay;
         cubes = GetComponentsInChildren<Transform>();
+
+        if (!gameObject.name.Contains("Temp"))
+        {
+            sideCol = transform.Find("SideCollisionCheck").gameObject;
+        }
     }
     
     //Make the block fall after spawning
@@ -44,11 +48,11 @@ public class Block : MonoBehaviour
 
         //Check for collision below the block
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position + downOffset, Vector2.down, 0.05f);
-
-        if (cubes.Length > 1)
+        
+        if (cubes.Length > 1 && !gameObject.name.Contains("Temp"))
         {
-            leftCol = cubes[1].GetComponent<Cube>().LeftCheck();
-            rightCol = cubes[1].GetComponent<Cube>().RightCheck();
+            leftCol = SideCollisionCheck.LeftCheck(sideCol);
+            rightCol = SideCollisionCheck.RightCheck(sideCol);
         }
         
         //If there is nothing below the block, continue falling
@@ -71,17 +75,32 @@ public class Block : MonoBehaviour
             {
                 foreach (Transform cube in GetComponentsInChildren<Transform>())
                 {
-                    if (cube.gameObject != gameObject)
+                    if (cube.gameObject != gameObject && cube.gameObject.name != "SideCollisionCheck")
                     {
                         cube.parent = null;
-                        if (gameObject.name.Contains("Temp"))
+                        if (gameObject.tag.Contains("Temp"))
                         {
-                            BoardManager.BoardMng.matchChecking = true;
+                            if (gameObject.tag.Contains("0"))
+                            {
+                                BoardManager.Instance.matchCheckings[0] = true;
+                            }
+                            else
+                            {
+                                BoardManager.Instance.matchCheckings[1] = true;
+                            }
                         }
                         else
                         {
-                            BoardManager.BoardMng.cubes.Add(cube.gameObject);
-                            BoardManager.BoardMng.matchChecking = true;
+                            if (gameObject.tag.Contains("0"))
+                            {
+                                BoardManager.Instance.cubes[0].Add(cube.gameObject);
+                                BoardManager.Instance.matchCheckings[0] = true;
+                            }
+                            else
+                            {
+                                BoardManager.Instance.cubes[1].Add(cube.gameObject);
+                                BoardManager.Instance.matchCheckings[1] = true;
+                            }
                         }
                     }
                 }
@@ -89,38 +108,5 @@ public class Block : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-
-        //if (timer <= 0)
-        //{
-        //    //If there is nothing below the block, continue falling
-        //    if (!hitInfo.collider)
-        //    {
-        //        //Falling
-        //        gameObject.transform.position -= new Vector3(0, fallStep, 0);
-        //
-        //        timer = timeStep;
-        //    }
-        //    else //If there is something below, stop falling
-        //    {
-        //        foreach (Transform cube in GetComponentsInChildren<Transform>())
-        //        {
-        //            if (cube.gameObject != gameObject)
-        //            {
-        //                cube.parent = null;
-        //                if (gameObject.name.Contains("Temp"))
-        //                {
-        //                    BoardManager.BoardMng.matchChecking = true;
-        //                }
-        //                else
-        //                {
-        //                    BoardManager.BoardMng.cubes.Add(cube.gameObject);
-        //                    BoardManager.BoardMng.matchChecking = true;
-        //                }
-        //            }
-        //        }
-        //
-        //        Destroy(gameObject);
-        //    }
-        //}
     }
 }

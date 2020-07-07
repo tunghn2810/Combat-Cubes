@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 208789815889603051}
   - component: {fileID: 1462031511207196476}
   - component: {fileID: 7251075009592751831}
+  - component: {fileID: 612126304517036229}
   m_Layer: 8
   m_Name: Blue
   m_TagString: BlueCube
@@ -137,3 +138,22 @@ MonoBehaviour:
   bingoVert: 0
   bingoBslash: 0
   bingoFslash: 0
+--- !u!95 &612126304517036229
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208789815889603050}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3728490a149541f4eb92362b4925c646, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

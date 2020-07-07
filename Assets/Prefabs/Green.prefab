@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6252790791267466848}
   - component: {fileID: -4186554869300708531}
   - component: {fileID: 2590169763933533626}
+  - component: {fileID: 7154278078058642893}
   m_Layer: 8
   m_Name: Green
   m_TagString: GreenCube
@@ -137,3 +138,22 @@ MonoBehaviour:
   bingoVert: 0
   bingoBslash: 0
   bingoFslash: 0
+--- !u!95 &7154278078058642893
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6252790791267466851}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6c1579aaabf948b459c629558681a9bc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

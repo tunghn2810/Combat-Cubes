@@ -10,8 +10,12 @@ TagManager:
   - YellowCube
   - PurpleCube
   - Cube
-  - TempBlock
-  - MainBlock
+  - MainBlock0
+  - MainBlock1
+  - TempBlock0
+  - TempBlock1
+  - NextBlock0
+  - NextBlock1
   layers:
   - Default
   - TransparentFX

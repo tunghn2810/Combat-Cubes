@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/HotSeat.unity
+    guid: b52c76a45e5204b4d95f16c856b62907
   m_configObjects: {}

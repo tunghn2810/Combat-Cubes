@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7841068543667491911}
   - component: {fileID: 2677606059301266415}
   - component: {fileID: -2128373219281837829}
+  - component: {fileID: 2896665320528381598}
   m_Layer: 8
   m_Name: Purple
   m_TagString: PurpleCube
@@ -137,3 +138,22 @@ MonoBehaviour:
   bingoVert: 0
   bingoBslash: 0
   bingoFslash: 0
+--- !u!95 &2896665320528381598
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7841068543667491908}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: afee292747c431646b8d41fd6c6e6dd9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

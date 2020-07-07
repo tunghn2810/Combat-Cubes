@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7240562911122411190}
   - component: {fileID: 965758393492747948}
   - component: {fileID: -1169982469734775160}
+  - component: {fileID: 7098128665460552076}
   m_Layer: 8
   m_Name: Yellow
   m_TagString: YellowCube
@@ -100,7 +101,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.64, y: 0.64}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 0.64, y: 0.64}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -137,3 +138,22 @@ MonoBehaviour:
   bingoVert: 0
   bingoBslash: 0
   bingoFslash: 0
+--- !u!95 &7098128665460552076
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7240562911122411191}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c3e47c73ee45dd34690f29fa4fa2acfa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
